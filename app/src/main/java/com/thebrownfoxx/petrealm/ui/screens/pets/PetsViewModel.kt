@@ -2,11 +2,11 @@ package com.thebrownfoxx.petrealm.ui.screens.pets
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hamthelegend.enchantmentorder.extensions.mapToStateFlow
+import com.hamthelegend.enchantmentorder.extensions.combineToStateFlow
+import com.hamthelegend.enchantmentorder.extensions.search
 import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Pet
 import com.thebrownfoxx.petrealm.realm.RealmDatabase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -19,10 +19,12 @@ class PetsViewModel : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    val pets = database.getAllPets().mapToStateFlow(
+    val pets = combineToStateFlow(
+        database.getAllPets(),
+        searchQuery,
         scope = viewModelScope,
         initialValue = emptyList(),
-    ) { realmPets ->
+    ) { realmPets, searchQuery ->
         realmPets.map { realmPet ->
             Pet(
                 id = realmPet.id.toHexString(),
@@ -37,7 +39,7 @@ class PetsViewModel : ViewModel() {
                     )
                 },
             )
-        }
+        }.search(searchQuery) { it.name }
     }
 
     private val _addPetDialogState = MutableStateFlow<AddPetDialogState>(AddPetDialogState.Hidden)
