@@ -6,11 +6,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.thebrownfoxx.petrealm.application
 
 @Destination
 @Composable
 fun Owners(navigator: DestinationsNavigator) {
-    val viewModel: OwnersViewModel = viewModel()
+    val viewModel = viewModel { OwnersViewModel(application.database) }
 
     with(viewModel) {
         val owners by owners.collectAsStateWithLifecycle()

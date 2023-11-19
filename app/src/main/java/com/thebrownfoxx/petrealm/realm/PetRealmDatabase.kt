@@ -13,18 +13,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
 
-class RealmDatabase {
-    private val realm: Realm by lazy {
-        val config = RealmConfiguration.Builder(
-            schema = setOf(RealmPet::class, RealmOwner::class, RealmPetType::class)
-        ).schemaVersion(1)
-            .initialData {
-                copyToRealm(RealmPetType().apply { name = "Cat" })
-                copyToRealm(RealmPetType().apply { name = "Dog" })
-            }
-            .build()
-        Realm.open(config)
-    }
+class PetRealmDatabase {
+    private val config = RealmConfiguration.Builder(
+        schema = setOf(RealmPet::class, RealmOwner::class, RealmPetType::class)
+    ).schemaVersion(1)
+        .initialData {
+            copyToRealm(RealmPetType().apply { name = "Cat" })
+            copyToRealm(RealmPetType().apply { name = "Dog" })
+        }
+        .build()
+    private val realm: Realm = Realm.open(config)
 
     fun getAllPetTypes(): Flow<List<RealmPetType>> =
         realm.query<RealmPetType>().asFlow().map { it.list }

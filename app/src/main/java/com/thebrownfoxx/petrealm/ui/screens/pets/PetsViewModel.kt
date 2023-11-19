@@ -6,16 +6,14 @@ import com.hamthelegend.enchantmentorder.extensions.combineToStateFlow
 import com.hamthelegend.enchantmentorder.extensions.search
 import com.thebrownfoxx.petrealm.models.Owner
 import com.thebrownfoxx.petrealm.models.Pet
-import com.thebrownfoxx.petrealm.realm.RealmDatabase
+import com.thebrownfoxx.petrealm.realm.PetRealmDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mongodb.kbson.ObjectId
 
-class PetsViewModel : ViewModel() {
-    private val database = RealmDatabase()
-
+class PetsViewModel(private val database: PetRealmDatabase) : ViewModel() {
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 

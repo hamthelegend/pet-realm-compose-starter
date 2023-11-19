@@ -6,11 +6,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
+import com.thebrownfoxx.petrealm.application
 
 @Destination
 @Composable
 fun Pets(navigator: DestinationsNavigator) {
-    val viewModel: PetsViewModel = viewModel()
+    val viewModel = viewModel { PetsViewModel(application.database) }
 
     with(viewModel) {
         val pets by pets.collectAsStateWithLifecycle()
