@@ -36,6 +36,7 @@ fun PetsScreen(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
+        modifier = modifier,
         topBar = {
             Surface(tonalElevation = Elevation.level(3)) {
                 OutlinedTextField(
